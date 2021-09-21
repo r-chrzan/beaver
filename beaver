@@ -9,5 +9,6 @@ $application = new Application();
 
 # add our commands
 $application->add(new MakeCommand());
+$application->add(new MakeBlocks());
 
 $application->run();

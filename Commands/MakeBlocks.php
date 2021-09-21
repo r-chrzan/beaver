@@ -7,9 +7,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class MakeCommand extends Command
+class MakeBlocks extends Command
 {
-    protected $commandName = 'make:controller';
+    protected $commandName = 'make:block';
     protected $commandDescription = "Automatic generate class controller.";
 
     protected $commandArgumentName = "repositoriey";
@@ -17,8 +17,8 @@ class MakeCommand extends Command
 
     protected $commandOptionName = "clear"; // should be specified like "app:greet John --cap"
     protected $commandOptionDescription = 'If set, it will generate in uppercase letters';
-    protected $pathControllerFirst = 'example/sample.php';
-    protected $pathControllerSecond = 'example/clearSample.php';
+    protected $pathControllerFirst = 'example/blocks.php';
+    // protected $pathControllerSecond = 'example/clearSample.php';
 
     protected function configure()
     {
@@ -62,10 +62,10 @@ class MakeCommand extends Command
     protected function controllerFlow($nameController)
     {
         if (!file_exists($nameController . '.php')) {
-            fopen('app/Controllers/' . $nameController . '.php', 'w');
+            fopen('app/Blocks/' . $nameController . '.php', 'w');
         }
         $string = $this->readFlow($nameController);
-        $open = fopen('app/Controllers/' . $nameController . '.php', 'w+');
+        $open = fopen('app/Blocks/' . $nameController . '.php', 'w+');
         fwrite($open, $string);
     }
 
@@ -93,13 +93,11 @@ class MakeCommand extends Command
         $lines = $this->prepareControllerFlow($this->pathControllerFirst);
 
         $data = '';
-        $extends = '';
-        $extends .= $nameController;
-        $extends .= " extends Controller";
+
         foreach ($lines as $lineder) {
             $open = implode('|', array_map('trim', explode('|', $lineder)));
-            $findout = strstr($open, 'DefaultController');
-            $changed = str_replace($findout, $extends, $lineder);
+            $findout = strstr($open, 'DefaultBlock');
+            $changed = str_replace($findout, $nameController, $lineder);
             $data .= $changed;
         }
         return $data;
@@ -112,7 +110,7 @@ class MakeCommand extends Command
         $data = '';
         foreach ($lines as $lineder) {
             $open = implode('|', array_map('trim', explode('|', $lineder)));
-            $findout = strstr($open, 'DefaultController');
+            $findout = strstr($open, 'DefaultBlock');
             $changed = str_replace($findout, $nameController, $lineder);
             $data .= $changed;
         }

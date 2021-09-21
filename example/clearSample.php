@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use Sober\Controller\Controller;
 
-class defaultController extends Controller
+class DefaultController extends Controller
 {
-    
+
 }
