@@ -8,6 +8,6 @@ use Symfony\Component\Console\Application;
 $application = new Application();
 
 # add our commands
-$application->add(new GreetCommand());
+$application->add(new MakeCommand());
 
 $application->run();
