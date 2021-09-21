@@ -17,7 +17,8 @@ class MakeBlocks extends Command
 
     protected $commandOptionName = "clear"; // should be specified like "app:greet John --cap"
     protected $commandOptionDescription = 'If set, it will generate in uppercase letters';
-    protected $pathControllerFirst = 'example/blocks.php';
+    protected $pathControllerBlock = 'example/blocks.php';
+    protected $pathViewBlock = 'example/blocks.blade.php';
     // protected $pathControllerSecond = 'example/clearSample.php';
 
     protected function configure()
@@ -45,14 +46,15 @@ class MakeBlocks extends Command
         $name = $input->getArgument($this->commandArgumentName);
 
         if ($name) {
-            $text = 'Controller with name ' . $name . ' has been created.';
+            $text = 'Block with name ' . $name . ' has been created.';
             $this->controllerFlow($name);
+            $this->viewFlow($name);
         } else {
-            $text = 'Controller is missing.';
+            $text = 'Block is missing.';
         }
 
         if ($input->getOption($this->commandOptionName)) {
-            $text = 'Controller with name ' . $name . ' has been created with clear code.';
+            $text = 'Block with name ' . $name . ' has been created with clear code.';
             $this->controllerCleanFlow($name);
         }
 
@@ -69,15 +71,25 @@ class MakeBlocks extends Command
         fwrite($open, $string);
     }
 
-    protected function controllerCleanFlow($nameController)
+    protected function viewFlow($nameController)
     {
-        if (!file_exists($nameController . '.php')) {
-            fopen('app/Controllers' . $nameController . '.php', 'w');
+        if (!file_exists(strtolower($nameController) . '.blade.php')) {
+            fopen('resources/views/' . strtolower($nameController) . '.blade.php', 'w');
         }
-        $string = $this->readCleanFlow($nameController);
-        $open = fopen('app/Controllers' . $nameController . '.php', 'w+');
+        $string = $this->readBlock($nameController);
+        $open = fopen('resources/views/' . strtolower($nameController) . '.blade.php', 'w+');
         fwrite($open, $string);
     }
+
+    // protected function controllerCleanFlow($nameController)
+    // {
+    //     if (!file_exists($nameController . '.php')) {
+    //         fopen('app/Controllers' . $nameController . '.php', 'w');
+    //     }
+    //     $string = $this->readCleanFlow($nameController);
+    //     $open = fopen('app/Controllers' . $nameController . '.php', 'w+');
+    //     fwrite($open, $string);
+    // }
 
     protected function prepareControllerFlow($path)
     {
@@ -90,7 +102,7 @@ class MakeBlocks extends Command
 
     protected function readFlow($nameController)
     {
-        $lines = $this->prepareControllerFlow($this->pathControllerFirst);
+        $lines = $this->prepareControllerFlow($this->pathControllerBlock);
 
         $data = '';
 
@@ -103,18 +115,33 @@ class MakeBlocks extends Command
         return $data;
     }
 
-    protected function readCleanFlow($nameController)
+    protected function readBlock($nameController)
     {
-        $lines = $this->prepareControllerFlow($this->pathControllerSecond);
-
+        $lines = $this->prepareControllerFlow($this->pathViewBlock);
+        $blockName = strtolower($nameController);
         $data = '';
+
         foreach ($lines as $lineder) {
             $open = implode('|', array_map('trim', explode('|', $lineder)));
-            $findout = strstr($open, 'DefaultBlock');
-            $changed = str_replace($findout, $nameController, $lineder);
+            $findout = strstr($open, 'default');
+            $changed = str_replace($findout, $blockName . '">', $lineder);
             $data .= $changed;
         }
         return $data;
-
     }
+
+    // protected function readCleanFlow($nameController)
+    // {
+    //     $lines = $this->prepareControllerFlow($this->pathControllerSecond);
+
+    //     $data = '';
+    //     foreach ($lines as $lineder) {
+    //         $open = implode('|', array_map('trim', explode('|', $lineder)));
+    //         $findout = strstr($open, 'DefaultBlock');
+    //         $changed = str_replace($findout, $nameController, $lineder);
+    //         $data .= $changed;
+    //     }
+    //     return $data;
+
+    // }
 }
