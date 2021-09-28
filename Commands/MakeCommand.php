@@ -21,6 +21,7 @@ class MakeCommand extends Command
     protected $commandOptionDescription = 'If set, it will generate in uppercase letters';
 
     protected const OPEN_ROW = '<' . '?php' . "\n\n";
+    
     // Create a private variable to store the twig environment
     private $twig;
 
@@ -57,85 +58,29 @@ class MakeCommand extends Command
 
         if ($name) {
             $text = 'Controller with name ' . $name . ' has been created.';
-            $this->controllerFlow($name);
+            $this->createController($name);
         } else {
             $text = 'Controller is missing.';
-        }
-
-        if ($input->getOption($this->commandOptionName)) {
-            $text = 'Controller with name ' . $name . ' has been created with clear code.';
-            $this->controllerCleanFlow($name);
         }
 
         $output->writeln($text);
     }
 
-    protected function controllerFlow($nameController)
+    protected function createController($nameController)
     {
         if (!file_exists($nameController . '.php')) {
             fopen('app/Controllers/' . $nameController . '.php', 'w');
         }
-        $string = $this->readFlow($nameController);
+        $string = $this->renderController($nameController);
         $open = fopen('app/Controllers/' . $nameController . '.php', 'w+');
         fwrite($open, $string);
     }
 
-    protected function controllerCleanFlow($nameController)
+    protected function renderController($nameController)
     {
-        if (!file_exists($nameController . '.php')) {
-            fopen('app/Controllers' . $nameController . '.php', 'w');
-        }
-        $string = $this->readCleanFlow($nameController);
-        $open = fopen('app/Controllers' . $nameController . '.php', 'w+');
-        fwrite($open, $string);
-    }
-
-    protected function prepareControllerFlow($path)
-    {
-        $auto = ini_get('auto_detect_line_endings');
-        $lines = file($path);
-        ini_set('auto_detect_line_endings', $auto);
-
-        return $lines;
-    }
-
-    protected function readFlow($nameController)
-    {
-        // $lines = $this->prepareControllerFlow($this->pathControllerFirst);
-
-        // $data = '';
-        // $extends = '';
-        // $extends .= $nameController;
-        // $extends .= " extends Controller";
-        // foreach ($lines as $lineder) {
-        //     $open = implode('|', array_map('trim', explode('|', $lineder)));
-        //     $findout = strstr($open, 'defaultController');
-        //     $changed = str_replace($findout, $extends, $lineder);
-        //     $data .= $changed;
-        // }
-        // return $data;
-        $controller_render = self::OPEN_ROW . $this->twig->render('/sample.twig', [
-            // this array defines the variables passed to the template,
-            // where the key is the variable name and the value is the variable value
-            // (Twig recommends using snake_case variable names: 'foo_bar' instead of 'fooBar')
+        $controller_render = self::OPEN_ROW . $this->twig->render('/controller.twig', [
             'name_controller' => $nameController
         ]);
-
         return $controller_render;
-    }
-
-    protected function readCleanFlow($nameController)
-    {
-        $lines = $this->prepareControllerFlow($this->pathControllerSecond);
-
-        $data = '';
-        foreach ($lines as $lineder) {
-            $open = implode('|', array_map('trim', explode('|', $lineder)));
-            $findout = strstr($open, 'defaultController');
-            $changed = str_replace($findout, $nameController, $lineder);
-            $data .= $changed;
-        }
-        return $data;
-
     }
 }

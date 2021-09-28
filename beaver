@@ -7,7 +7,7 @@ use Symfony\Component\Console\Application;
 $application = new Application();
 
 # add our commands
-$loader = new \Twig\Loader\FilesystemLoader('example');
+$loader = new \Twig\Loader\FilesystemLoader('template');
 $application->add(new MakeCommand(new \Twig\Environment($loader)));
 
 $application->run();
