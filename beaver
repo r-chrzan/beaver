@@ -4,10 +4,10 @@ namespace beaver;
 require __DIR__ . '/vendor/autoload.php';
 
 use Symfony\Component\Console\Application;
-
 $application = new Application();
 
 # add our commands
-$application->add(new MakeCommand());
+$loader = new \Twig\Loader\FilesystemLoader('example');
+$application->add(new MakeCommand(new \Twig\Environment($loader)));
 
 $application->run();
