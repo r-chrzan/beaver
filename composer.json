@@ -1,6 +1,8 @@
 {
   "require" :{
-      "symfony/console": "4.0"
+    "symfony/console": "^4.0",
+    "twig/twig": "^2.0",
+    "larapack/dd": "^1.1"
   },
   "autoload": {
     "classmap": ["Commands"]
