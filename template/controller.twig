@@ -4,5 +4,12 @@ use Sober\Controller\Controller;
 
 class {{ name_controller }} extends Controller
 {
-    
+    public function __construct()
+    {
+    }
+
+    public function getSampleAcfField()
+    {
+        return get_field('sample_field_acf');
+    }
 }
