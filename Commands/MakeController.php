@@ -8,7 +8,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Twig\Environment;
 
-class MakeCommand extends Command
+class MakeController extends Command
 {
 
     protected $commandName = 'make:controller';
