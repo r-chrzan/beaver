@@ -10,5 +10,6 @@ $application = new Application();
 # add our commands
 $loader = new \Twig\Loader\FilesystemLoader('template');
 $application->add(new MakeController(new \Twig\Environment($loader)));
+$application->add(new MakeBlock(new \Twig\Environment($loader)));
 
 $application->run();

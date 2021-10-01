@@ -1,0 +1,22 @@
+
+  Title: {{ block_name }}
+  Description: 
+  Category: formatting
+  Icon: admin-comments
+  Keywords: 
+  Mode: edit
+  Align: left
+  PostTypes:
+  SupportsAlign: left right
+  SupportsMode: false
+  SupportsMultiple: false
+  EnqueueStyle: styles/{{ class_name }}.css
+  EnqueueScript: scripts/{{ class_name }}.js
+  EnqueueAssets: path/to/asset
+--}}
+
+@use(\App\Blocks\{{ block_name_camel }})
+
+<section class="{{ class_name }}">
+
+</section>
