@@ -1,7 +1,7 @@
 # Beaver
 
-PHP command witch helps to development with sage/roots theme.
-
+PHP command which helps to development with sage/roots theme.
+R
 ## Installation
 
 Copy this repo to your sage theme and run
